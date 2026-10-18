@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AUTOSFERA — Премиальный детейлинг</title>
+<meta name="description" content="Мойка, полировка, керамика и химчистка. Запись онлайн.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070708; --bg-2:#0d0d10; --panel:#121216; --panel-2:#15151b;
+  --gold:#d4a853; --gold-soft:#e8c88a; --bronze:#a67c52;
+  --text:#f3ede3; --muted:#8f887e; --soft:#b9b2a6;
+  --line:rgba(212,168,83,.16); --line-strong:rgba(212,168,83,.5);
+  --ok:#8fc49a; --warn:#d4a853; --err:#d9776b;
+  --nav-bg:rgba(7,7,8,.82); --field:rgba(243,237,227,.16); --on-gold:#0a0a0a;
+  --ease:cubic-bezier(.2,.7,.1,1);
+}
+html[data-theme="light"]{
+  --bg:#f6f3ed; --bg-2:#ece7dc; --panel:#ffffff; --panel-2:#fbf9f5;
+  --gold:#a67c2e; --gold-soft:#8a6420; --bronze:#8a6a40;
+  --text:#17151a; --muted:#6f685e; --soft:#4a463f;
+  --line:rgba(166,124,46,.28); --line-strong:rgba(166,124,46,.7);
+  --ok:#3f8a52; --warn:#a67c2e; --err:#b4483c;
+  --nav-bg:rgba(246,243,237,.88); --field:rgba(23,21,26,.22); --on-gold:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',system-ui,sans-serif;line-height:1.6;overflow-x:hidden;transition:background .6s var(--ease),color .6s var(--ease)}
+::selection{background:var(--gold);color:var(--on-gold)}
+button,input,select{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif;font-weight:500;line-height:1.05;letter-spacing:-.01em}
+
+.progress{position:fixed;top:0;left:0;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--bronze),var(--gold-soft));z-index:100}
+
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px clamp(20px,5vw,72px);transition:background .5s var(--ease),padding .5s var(--ease)}
+.nav.solid{background:var(--nav-bg);backdrop-filter:blur(14px);padding-top:14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.logo{font-family:'Cormorant Garamond',serif;font-size:24px;letter-spacing:.32em;font-weight:600}
+.logo span{color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:26px}
+.nav ul{display:flex;gap:10px;list-style:none;font-size:13px;color:var(--muted)}
+.nav ul a{position:relative;display:inline-block;padding:8px 16px;border:1px solid rgba(212,168,83,.55);border-radius:14px;background:rgba(10,10,12,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:color .35s,border-color .35s,background .35s,transform .45s var(--ease)}
+.nav ul a::after{content:none}
+.nav ul a:hover{color:var(--gold);border-color:var(--gold-soft);background:rgba(212,168,83,.14);transform:translateY(-2px)}
+.nav ul a:active{transform:translateY(0) scale(.97)}
+.theme-btn{width:40px;height:40px;border:1px solid var(--line);background:none;color:var(--gold);cursor:pointer;display:grid;place-items:center;transition:background .3s,transform .5s var(--ease)}
+.theme-btn:hover{background:var(--gold);color:var(--on-gold);transform:rotate(20deg)}
+.theme-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6}
+
+.btn-gold{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 30px;border-radius:2px;background:var(--gold);color:var(--on-gold);font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;border:none;cursor:pointer;position:relative;overflow:hidden;transition:transform .4s var(--ease),box-shadow .4s}
+.btn-gold::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.5) 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s var(--ease)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 14px 40px -10px rgba(212,168,83,.55)}
+.btn-gold:hover::before{transform:translateX(120%)}
+.btn-gold:active{transform:scale(.98)}
+.btn-gold:disabled{opacity:.5;cursor:default;transform:none;box-shadow:none}
+.btn-line{display:inline-flex;align-items:center;justify-content:center;padding:15px 28px;border:1px solid var(--field);background:none;color:var(--text);font-size:13px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:border-color .3s,color .3s}
+.btn-line:hover{border-color:var(--gold);color:var(--gold)}
+
+/* hero */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('assets/bmw-m5.png') 62% center/cover no-repeat;transform:scale(1.08);animation:heroZoom 16s var(--ease) forwards}
+@keyframes heroZoom{to{transform:scale(1)}}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 92%,transparent) 28%,color-mix(in srgb,var(--bg) 35%,transparent) 62%,color-mix(in srgb,var(--bg) 15%,transparent) 100%),linear-gradient(0deg,var(--bg) 0%,transparent 30%)}
+.hero-content{position:relative;z-index:2;padding:0 clamp(20px,5vw,72px);max-width:640px;margin-top:40px}
+.hero-kicker{font-size:12px;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;margin-bottom:26px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeUp 1s .2s var(--ease) forwards}
+.hero-kicker::before{content:"";width:46px;height:1px;background:var(--gold)}
+.hero h1{font-size:clamp(46px,7vw,96px);font-weight:400;min-height:2.1em}
+.typed{color:var(--gold-soft);font-style:italic}
+.caret{display:inline-block;width:2px;height:.85em;background:var(--gold);margin-left:4px;vertical-align:-.08em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero p{margin-top:28px;color:var(--soft);max-width:440px;font-size:16px;opacity:0;animation:fadeUp 1s .9s var(--ease) forwards}
+.hero-cta{margin-top:44px;display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:fadeUp 1s 1.1s var(--ease) forwards}
+.scroll-hint{position:absolute;bottom:34px;left:clamp(20px,5vw,72px);font-size:11px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;z-index:2;display:flex;align-items:center;gap:14px}
+.scroll-hint i{width:1px;height:46px;background:linear-gradient(var(--gold),transparent);animation:drip 2.2s var(--ease) infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+/* sections */
+section{position:relative;padding:clamp(90px,12vw,160px) clamp(20px,5vw,72px)}
+.wrap{max-width:1220px;margin:0 auto}
+.sec-title{font-size:clamp(38px,5vw,64px);font-weight:400;max-width:680px}
+.sec-lead{color:var(--muted);margin-top:18px;max-width:500px}
+.head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;margin-bottom:64px}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+
+/* glow cards */
+.glow{position:relative;background:var(--panel);border:1px solid var(--line);padding:38px 32px 32px;overflow:hidden;transition:border-color .5s,transform .6s var(--ease)}
+.glow::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(212,168,83,.16),transparent 55%);opacity:0;transition:opacity .5s}
+.glow:hover{border-color:var(--line-strong);transform:translateY(-4px)}
+.glow:hover::before{opacity:1}
+.card-ico{width:44px;height:44px;border:1px solid var(--line);display:grid;place-items:center;color:var(--gold);margin-bottom:28px;transition:background .4s,color .4s}
+.glow:hover .card-ico{background:var(--gold);color:var(--on-gold)}
+.card-ico svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5}
+.glow h3{font-size:28px;margin-bottom:12px}
+.glow p{color:var(--muted);font-size:14px;min-height:46px}
+.card-foot{display:flex;justify-content:space-between;align-items:baseline;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.card-foot span{color:var(--gold-soft);font-family:'Cormorant Garamond',serif;font-size:24px}
+.card-foot small{color:var(--muted);font-size:12px;letter-spacing:.06em}
+
+/* about */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,7vw,110px);align-items:center}
+.about-section{background:var(--bg-2)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:44px 30px;margin-top:56px}
+.stat b{display:block;font-family:'Cormorant Garamond',serif;font-size:58px;font-weight:400;color:var(--gold);line-height:1}
+.stat span{color:var(--muted);font-size:13px}
+.about-img{position:relative;aspect-ratio:4/5;overflow:hidden;border:1px solid var(--line)}
+.about-img img{width:100%;height:100%;object-fit:cover;object-position:70% center;transform:scale(1.15);transition:transform 2.2s var(--ease)}
+.about-img.in img{transform:scale(1)}
+.about-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.45))}
+
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,400px));justify-content:center;gap:20px}
+.ba{position:relative;aspect-ratio:4/3;overflow:hidden;border:1px solid var(--line);background:var(--panel);cursor:ew-resize;user-select:none;--pos:50%}
+.ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.ba .after{clip-path:inset(0 0 0 var(--pos))}
+.ba:hover img{transform:scale(1.03)}
+.ba .handle{position:absolute;top:0;bottom:0;left:var(--pos);width:1px;background:var(--gold-soft);box-shadow:0 0 12px var(--gold)}
+.ba .handle::after{content:"";position:absolute;top:50%;left:-15px;width:30px;height:30px;margin-top:-15px;border:1px solid var(--gold-soft);border-radius:50%;background:rgba(0,0,0,.35)}
+.ba .tag{position:absolute;top:14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:rgba(0,0,0,.55);color:#fff;padding:5px 10px}
+.ba .tag.l{left:14px}.ba .tag.r{right:14px}
+.ba-cap{margin-top:14px;font-family:'Cormorant Garamond',serif;font-size:24px;text-transform:capitalize}
+.gallery-empty{grid-column:1/-1;border:1px dashed var(--line-strong);padding:60px 30px;text-align:center;color:var(--muted)}
+.gallery-empty h3{font-size:30px;color:var(--text);margin-bottom:10px}
+
+/* booking */
+.booking-wrap{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(30px,4vw,60px);margin-top:70px}
+.cal,.form{background:var(--panel);border:1px solid var(--line);padding:30px}
+.cal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.cal-top h4{font-size:30px;text-transform:capitalize}
+.cal-nav{display:flex;gap:8px}
+.cal-nav button{width:38px;height:38px;border:1px solid var(--line);background:none;color:var(--gold);cursor:pointer;font-size:18px;transition:background .3s,color .3s}
+.cal-nav button:hover:not(:disabled){background:var(--gold);color:var(--on-gold)}
+.cal-nav button:disabled{opacity:.25;cursor:default}
+.cal-week,.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-week span{text-align:center;font-size:11px;letter-spacing:.12em;color:var(--muted);padding-bottom:8px;text-transform:uppercase}
+.day{aspect-ratio:1;border:1px solid transparent;background:none;cursor:pointer;font-size:14px;position:relative;transition:background .3s,border-color .3s,color .3s,transform .3s var(--ease);animation:dayIn .5s var(--ease) both}
+.day:hover:not(:disabled){border-color:var(--line);color:var(--gold);transform:scale(1.06)}
+.day.today::after{content:"";position:absolute;bottom:6px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--gold)}
+.day.sel{background:var(--gold);color:var(--on-gold);font-weight:700;transform:scale(1.04)}
+.day:disabled{color:var(--muted);opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.day.empty{pointer-events:none}
+@keyframes dayIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.slots-title{font-size:12px;letter-spacing:.14em;color:var(--muted);margin:26px 0 14px;text-transform:uppercase}
+.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;min-height:90px}
+.slot{padding:12px 0;border:1px solid var(--line);background:none;cursor:pointer;font-size:14px;transition:all .3s var(--ease)}
+.slot:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.slot.sel{background:var(--gold);border-color:var(--gold);color:var(--on-gold);font-weight:700}
+.slot:disabled{opacity:.3;text-decoration:line-through;cursor:not-allowed}
+.hint{grid-column:1/-1;color:var(--muted);font-size:13px;align-self:center}
+.cal-err{color:var(--err);font-size:12px;margin-top:10px;min-height:16px}
+
+.form{display:flex;flex-direction:column;gap:22px}
+.form h4{font-size:34px}
+.form>p{color:var(--muted);font-size:14px;margin-top:-12px}
+.field{position:relative}
+.field label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;transition:color .3s}
+.field input,.field select{width:100%;background:none;border:none;border-bottom:1px solid var(--field);padding:10px 0 12px;font-size:16px;outline:none;transition:border-color .3s;border-radius:0;appearance:none;-webkit-appearance:none}
+.field select{cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,var(--gold) 50%),linear-gradient(135deg,var(--gold) 50%,transparent 50%);background-position:calc(100% - 10px) 52%,calc(100% - 5px) 52%;background-size:5px 5px;background-repeat:no-repeat}
+.field select option{background:var(--panel);color:var(--text)}
+.field::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:linear-gradient(90deg,var(--gold),var(--gold-soft));transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.field:focus-within::after{transform:scaleX(1)}
+.field:focus-within label{color:var(--gold)}
+.field.bump::before{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--gold-soft);animation:lineFlash .45s var(--ease)}
+.field.erase::before{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--bronze);transform-origin:right;animation:lineFlash .45s var(--ease)}
+@keyframes lineFlash{0%{transform:scaleX(0);opacity:1}100%{transform:scaleX(1);opacity:0}}
+.field input.typing{animation:charPop .25s var(--ease)}
+@keyframes charPop{from{letter-spacing:.06em}to{letter-spacing:0}}
+.field.err label{color:var(--err)}
+.field.err input,.field.err select{border-bottom-color:var(--err)}
+.field.err{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.err-msg{font-size:12px;color:var(--err);opacity:0;transition:opacity .3s;margin-top:4px}
+.field.err .err-msg{opacity:1}
+.promo-line{font-size:13px;min-height:20px;color:var(--muted);transition:color .3s;margin-top:-8px}
+.promo-line.ok{color:var(--gold)}
+.promo-line.bad{color:var(--err)}
+.price-box{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);padding-top:18px}
+.price-box span{color:var(--muted);font-size:13px}
+.price-box b{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:500;color:var(--gold)}
+.form .note{font-size:12px;color:var(--muted);text-align:center}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,160%);background:var(--panel);border:1px solid var(--gold);padding:18px 26px;display:flex;align-items:center;gap:16px;z-index:200;transition:transform .7s var(--ease);font-size:14px;box-shadow:0 20px 60px rgba(0,0,0,.35);max-width:92vw}
+.toast.show{transform:translate(-50%,0)}
+.toast.bad{border-color:var(--err)}
+.toast svg{width:34px;height:34px;flex:none}
+.toast circle{fill:none;stroke:var(--gold);stroke-width:1.5;stroke-dasharray:110;stroke-dashoffset:110;transition:stroke-dashoffset .8s var(--ease) .1s}
+.toast path{fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round;stroke-dasharray:30;stroke-dashoffset:30;transition:stroke-dashoffset .5s var(--ease) .8s}
+.toast.show circle,.toast.show path{stroke-dashoffset:0}
+
+footer{padding:60px clamp(20px,5vw,72px) 40px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.contacts{display:flex;gap:30px;flex-wrap:wrap}
+.contacts a:hover{color:var(--gold)}
+
+/* ================= ADMIN ================= */
+#admin{min-height:100vh;padding:clamp(24px,4vw,50px) clamp(16px,4vw,56px)}
+.a-login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.a-login-box{width:min(420px,100%);background:var(--panel);border:1px solid var(--line);padding:50px 40px;text-align:center;animation:fadeUp .8s var(--ease)}
+.a-login-box h2{font-size:36px;margin:12px 0 8px}
+.a-login-box p{color:var(--muted);font-size:14px;margin-bottom:34px}
+.a-login-box .field{text-align:left}
+.a-login-box .btn-gold{width:100%;margin-top:30px}
+.a-login-box.shake{animation:shake .45s}
+.a-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;padding-bottom:26px;border-bottom:1px solid var(--line);margin-bottom:30px}
+.a-top h2{font-size:42px}
+.a-actions{display:flex;gap:10px;flex-wrap:wrap}
+.a-actions .btn-line{padding:11px 18px;font-size:11px}
+.a-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:30px}
+.a-stat{background:var(--panel);border:1px solid var(--line);padding:22px 24px}
+.a-stat b{display:block;font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:400;color:var(--gold);line-height:1}
+.a-stat span{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.tabs{display:flex;gap:8px;margin-bottom:26px}
+.tab{background:none;border:none;border-bottom:2px solid transparent;padding:10px 4px;margin-right:18px;font-size:15px;color:var(--muted);cursor:pointer;transition:color .3s,border-color .3s}
+.tab.on{color:var(--text);border-color:var(--gold)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px}
+.chip{background:none;border:1px solid var(--line);padding:9px 16px;font-size:13px;color:var(--muted);cursor:pointer;transition:all .3s}
+.chip:hover{color:var(--text);border-color:var(--line-strong)}
+.chip.on{background:var(--gold);border-color:var(--gold);color:var(--on-gold);font-weight:700}
+.chip i{font-style:normal;opacity:.6;margin-left:6px}
+.list{display:grid;gap:14px}
+.bk{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--muted);padding:22px 24px;animation:fadeUp .6s var(--ease) both;transition:background .3s}
+.bk:hover{background:var(--panel-2)}
+.bk.st-waiting{border-left-color:var(--warn)}
+.bk.st-paid{border-left-color:var(--ok)}
+.bk.st-arrived{border-left-color:var(--gold-soft)}
+.bk.st-noshow{border-left-color:var(--err);opacity:.75}
+.bk.new{box-shadow:inset 0 0 0 1px var(--line-strong)}
+.bk-main{display:grid;grid-template-columns:150px 1fr auto auto;gap:24px;align-items:center}
+.bk-time b{display:block;font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:500;color:var(--gold-soft);line-height:1}
+.bk-time span{font-size:12px;color:var(--muted)}
+.bk-info h4{font-size:24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bk-info p{font-size:14px;color:var(--soft)}
+.bk-info .muted{color:var(--muted);font-size:13px}
+.bk-info .promo-tag{color:var(--gold);font-size:12px;letter-spacing:.06em}
+.bk-price{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold-soft);text-align:right;white-space:nowrap}
+.bk-price small{display:block;font-family:'Manrope',sans-serif;font-size:11px;color:var(--muted);text-decoration:line-through}
+.badge{font-family:'Manrope',sans-serif;font-style:normal;font-size:10px;font-weight:700;letter-spacing:.14em;background:var(--gold);color:var(--on-gold);padding:3px 7px;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(212,168,83,.6)}50%{box-shadow:0 0 0 7px rgba(212,168,83,0)}}
+.del{background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;width:36px;height:36px;transition:color .3s,transform .3s}
+.del:hover{color:var(--err);transform:rotate(90deg)}
+.bk-status{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.stbtn{background:none;border:1px solid var(--line);padding:9px 16px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .3s var(--ease)}
+.stbtn:hover{color:var(--text);transform:translateY(-1px)}
+.stbtn.on{color:var(--on-gold);font-weight:700}
+.bk.st-waiting .stbtn.on{background:var(--warn);border-color:var(--warn)}
+.bk.st-paid .stbtn.on{background:var(--ok);border-color:var(--ok)}
+.bk.st-arrived .stbtn.on{background:var(--gold-soft);border-color:var(--gold-soft)}
+.bk.st-noshow .stbtn.on{background:var(--err);border-color:var(--err);color:#fff}
+.a-empty{padding:70px 20px;text-align:center;color:var(--muted);border:1px dashed var(--line)}
+.a-empty h3{font-size:34px;color:var(--text);margin-bottom:10px}
+.promo-admin{display:grid;grid-template-columns:1fr 1fr auto;gap:14px;align-items:end;background:var(--panel);border:1px solid var(--line);padding:24px;margin-bottom:12px}
+.promo-msg{font-size:13px;color:var(--err);min-height:20px;margin-bottom:18px}
+.promo-list{display:grid;gap:10px}
+.promo-row{display:flex;justify-content:space-between;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--line);padding:18px 22px;flex-wrap:wrap}
+.promo-row b{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;letter-spacing:.08em}
+.promo-row span{color:var(--muted);font-size:13px}
+.promo-row.off{opacity:.5}
+.promo-row .acts{display:flex;gap:8px}
+.promo-row .acts button{background:none;border:1px solid var(--line);padding:8px 14px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .3s}
+.promo-row .acts button:hover{color:var(--gold);border-color:var(--line-strong)}
+.promo-row .acts button.danger:hover{color:var(--err);border-color:var(--err)}
+
+@media (max-width:980px){
+  .nav ul{display:none}
+  .about,.booking-wrap{grid-template-columns:1fr}
+  .about-img{aspect-ratio:16/11}
+  .promo-admin{grid-template-columns:1fr}
+  .bk-main{grid-template-columns:150px 1fr auto}
+  .bk-main .del{grid-column:3;grid-row:1}
+}
+@media (max-width:640px){
+  .bk-main{grid-template-columns:1fr auto}
+  .bk-time{grid-column:1/-1}
+  .bk-price{grid-column:1/-1;text-align:left}
+  .slots{grid-template-columns:repeat(4,1fr)}
+  .cal,.form{padding:24px 20px}
+  .stbtn{flex:1 1 calc(50% - 8px);text-align:center}
+  .hero-cta .btn-gold,.hero-cta .btn-line{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none}
+}
+
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<!-- ===================== SITE ===================== -->
+<div id="site">
+
+<header class="nav" id="nav">
+  <a href="#top" class="logo">AUTO<span>SFERA</span></a>
+  <div class="nav-right">
+    <ul>
+      <li><a href="#services">Услуги</a></li>
+      <li><a href="#gallery">Работы</a></li>
+      <li><a href="#about">О нас</a></li>
+      <li><a href="#booking">Запись</a></li>
+    </ul>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Сменить тему">
+      <svg viewBox="0 0 24 24" id="themeIcon"></svg>
+    </button>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-content">
+    <div class="hero-kicker">Детейлинг студия</div>
+    <h1><span id="typed" class="typed"></span><span class="caret"></span></h1>
+    <p>Полировка, керамика и уход, после которого автомобиль выглядит так, будто только что покинул салон.</p>
+    <div class="hero-cta">
+      <a href="#booking" class="btn-gold">Записаться онлайн</a>
+      <a href="#services" class="btn-line">Смотреть услуги</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><i></i>Листайте</div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="head-row reveal">
+      <h2 class="sec-title">Услуги, которые видно сразу</h2>
+      <p class="sec-lead">Каждая работа выполняется вручную, с контролем на каждом этапе. Точную стоимость назовём после осмотра автомобиля.</p>
+    </div>
+    <div class="grid" id="servicesGrid"></div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="head-row reveal">
+      <h2 class="sec-title">До и после</h2>
+      <p class="sec-lead">Потяните ползунок, чтобы сравнить состояние кузова до работ и после них.</p>
+    </div>
+    <div class="gallery" id="galleryGrid"></div>
+  </div>
+</section>
+
+<section id="about" class="about-section">
+  <div class="wrap about">
+    <div class="reveal">
+      <h2 class="sec-title">Студия, в которой не спешат</h2>
+      <p class="sec-lead">Работаем с одним автомобилем за раз. Так каждая деталь доводится до идеала, и мы отвечаем за результат.</p>
+      <div class="stats">
+        <div class="stat"><b>3</b><span>года опыта</span></div>
+        <div class="stat"><b>999+</b><span>автомобилей в работе</span></div>
+        <div class="stat"><b>1</b><span>год гарантии на керамику</span></div>
+        <div class="stat"><b>99%</b><span>клиентов возвращаются</span></div>
+      </div>
+    </div>
+    <div class="about-img reveal">
+      <img src="assets/luxury-car.png" alt="Чёрный автомобиль после детейлинга" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section id="booking">
+  <div class="wrap">
+    <div class="reveal">
+      <h2 class="sec-title">Выберите дату и время</h2>
+      <p class="sec-lead">Свободное время обновляется сразу. Занятые слоты недоступны для записи.</p>
+    </div>
+
+    <div class="booking-wrap">
+      <div class="cal reveal">
+        <div class="cal-top">
+          <h4 id="calTitle"></h4>
+          <div class="cal-nav">
+            <button type="button" id="prevM" aria-label="Предыдущий месяц">‹</button>
+            <button type="button" id="nextM" aria-label="Следующий месяц">›</button>
+          </div>
+        </div>
+        <div class="cal-week"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span></div>
+        <div class="cal-days" id="calDays"></div>
+        <div class="slots-title">Время</div>
+        <div class="slots" id="slots"></div>
+        <div class="cal-err" id="calErr"></div>
+      </div>
+
+      <form class="form reveal" id="bookForm" novalidate>
+        <h4>Ваша запись</h4>
+        <p>Заполните данные, и мы подтвердим визит по телефону.</p>
+
+        <div class="field" data-field>
+          <label for="f-name">Имя</label>
+          <input id="f-name" name="name" autocomplete="name" placeholder="Как к вам обращаться">
+          <div class="err-msg">Укажите имя</div>
+        </div>
+
+        <div class="field" data-field>
+          <label for="f-phone">Телефон</label>
+          <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__">
+          <div class="err-msg">Введите корректный номер</div>
+        </div>
+
+        <div class="field" data-field>
+          <label for="f-car">Автомобиль</label>
+          <input id="f-car" name="car" placeholder="Например, BMW M5">
+          <div class="err-msg">Укажите автомобиль</div>
+        </div>
+
+        <div class="field">
+          <label for="f-service">Услуга</label>
+          <select id="f-service"></select>
+        </div>
+
+        <div class="field" data-field>
+          <label for="f-promo">Промокод</label>
+          <input id="f-promo" name="promo" placeholder="Если есть" autocomplete="off">
+        </div>
+        <div class="promo-line" id="promoLine"></div>
+
+        <div class="price-box">
+          <span>К оплате на месте</span>
+          <b id="priceOut">—</b>
+        </div>
+
+        <button type="submit" class="btn-gold" id="submitBtn">Подтвердить запись</button>
+        <div class="note">Оплата при визите. Перенос — за 24 часа по телефону.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer id="contacts">
+  <div class="logo" style="font-size:20px">AUTO<span>SFERA</span></div>
+  <div class="contacts">
+    <a href="tel:+70000000000">+7 (000) 000-00-00</a>
+    <a href="#">Адрес студии</a>
+    <a href="#">Telegram</a>
+  </div>
+  <div>© 2026 AUTOSFERA</div>
+</footer>
+
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5"/><path d="M12 21 l5.5 5.5 L28 15"/></svg>
+  <span id="toastText"></span>
+</div>
+
+<!-- ===================== ADMIN ===================== -->
+<div id="admin" hidden>
+
+  <div class="a-login" id="loginView" hidden>
+    <form class="a-login-box" id="loginForm" novalidate>
+      <div class="logo" style="font-size:20px">AUTO<span>SFERA</span></div>
+      <h2>Панель управления</h2>
+      <p>Введите пароль, чтобы открыть заявки</p>
+      <div class="field">
+        <label for="pass">Пароль</label>
+        <input id="pass" type="password" autocomplete="current-password">
+        <div class="err-msg" id="loginErr">Неверный пароль</div>
+      </div>
+      <button type="submit" class="btn-gold">Войти</button>
+    </form>
+  </div>
+
+  <div id="panelView" hidden>
+    <div class="a-top">
+      <div>
+        <div class="logo" style="font-size:18px;margin-bottom:10px">AUTO<span>SFERA</span></div>
+        <h2>Админ-панель</h2>
+      </div>
+      <div class="a-actions">
+        <button class="btn-line" id="readAll" type="button">Все просмотрены</button>
+        <button class="btn-line" id="toSite" type="button">На сайт</button>
+        <button class="btn-line" id="logout" type="button">Выйти</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab on" data-tab="bookings" type="button">Заявки</button>
+      <button class="tab" data-tab="promos" type="button">Промокоды</button>
+    </div>
+
+    <div id="tabBookings">
+      <div class="a-stats">
+        <div class="a-stat"><b id="sAll">0</b><span>Всего заявок</span></div>
+        <div class="a-stat"><b id="sNew">0</b><span>Новых</span></div>
+        <div class="a-stat"><b id="sToday">0</b><span>На сегодня</span></div>
+        <div class="a-stat"><b id="sWait">0</b><span>В ожидании</span></div>
+      </div>
+      <div class="chips" id="chips"></div>
+      <div class="list" id="list"></div>
+    </div>
+
+    <div id="tabPromos" hidden>
+      <form class="promo-admin" id="promoForm" novalidate>
+        <div class="field"><label for="p-code">Код</label><input id="p-code" placeholder="FIRST15" autocomplete="off"></div>
+        <div class="field"><label for="p-pct">Скидка, %</label><input id="p-pct" type="number" min="1" max="90" placeholder="15"></div>
+        <button class="btn-gold" type="submit">Создать код</button>
+      </form>
+      <div class="promo-msg" id="promoMsg"></div>
+      <div class="promo-list" id="promoList"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const SESSION_KEY = 'autosfera_admin';
+  const THEME_KEY = 'autosfera_theme';
+
+  const $  = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const pad = n => String(n).padStart(2, '0');
+  const toIso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const fmtDate = iso => { const [y,m,d] = iso.split('-'); return `${d}.${m}.${y}`; };
+  const rub = n => Number(n).toLocaleString('ru-RU') + ' ₽';
+  const MONTHS = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+  const STATUS = {
+    waiting: { label: 'В ожидании', cls: 'st-waiting' },
+    paid:    { label: 'Оплатил',    cls: 'st-paid' },
+    arrived: { label: 'Приехал',    cls: 'st-arrived' },
+    noshow:  { label: 'Не приехал', cls: 'st-noshow' }
+  };
+
+  /* ---------- API ---------- */
+  // GitHub Pages preview mode: there is no backend or database here.
+  async function api(url, { method = 'GET', body, admin = false } = {}) {
+    if (url === '/api/services') return [
+      { id: 'wash', name: 'Мойка', desc: 'Бесконтактная мойка, очистка арок, сушка и защита кузова.', price: 1500, from: false, time: '1.5 ч' },
+      { id: 'polish', name: 'Полировка кузова', desc: 'Устранение голограмм и царапин, восстановление глубокого блеска.', price: 8000, from: true, time: '1 день' },
+      { id: 'ceramic', name: 'Керамика', desc: 'Защита от реагентов и UV, гидрофобный эффект и долгий глянец.', price: 15000, from: false, time: '2 дня' },
+      { id: 'interior', name: 'Химчистка салона', desc: 'Глубокая чистка кожи, текстиля и потолка.', price: 5000, from: false, time: '4 ч' }
+    ];
+    if (url === '/api/gallery') return [
+      { title: 'Фары', before: 'assets/gallery/headlight-before.jpg', after: 'assets/gallery/headlight-after.jpg' }
+    ];
+    if (url.startsWith('/api/slots?date=')) return { slots: ['10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'], taken: [] };
+    if (url === '/api/promo/check') throw Object.assign(new Error('В демо-версии промокоды отключены'), { status: 400 });
+    if (url === '/api/bookings' && method === 'POST') return { date: body.date, time: body.time, demo: true };
+    throw Object.assign(new Error('Эта функция доступна только в полной версии сайта'), { status: 503 });
+  }
+
+  /* ---------- theme ---------- */
+  const SUN  = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>';
+  const MOON = '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>';
+  function applyTheme(t){
+    document.documentElement.dataset.theme = t;
+    $('#themeIcon').innerHTML = t === 'light' ? MOON : SUN;
+  }
+  applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+  $('#themeBtn').addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem(THEME_KEY, next);
+    applyTheme(next);
+  });
+
+  /* ---------- typewriter (type + erase) ---------- */
+  const phrases = ['Премиальный детейлинг', 'Керамика на годы', 'Как из салона'];
+  const typed = $('#typed');
+  let pi = 0, ci = 0, deleting = false;
+  (function tick(){
+    const word = phrases[pi];
+    if (!deleting) {
+      ci++;
+      typed.textContent = word.slice(0, ci);
+      if (ci === word.length) { deleting = true; return setTimeout(tick, 1900); }
+      setTimeout(tick, 75);
+    } else {
+      ci--;
+      typed.textContent = word.slice(0, ci);
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; return setTimeout(tick, 350); }
+      setTimeout(tick, 38);
+    }
+  })();
+
+  /* ---------- scroll, reveal, counters ---------- */
+  const progress = $('#progress'), nav = $('#nav');
+  const onScroll = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    progress.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+    nav.classList.toggle('solid', scrollY > 60);
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    e.target.querySelectorAll('[data-count]').forEach(countUp);
+    io.unobserve(e.target);
+  }), { threshold: .15 });
+
+  function countUp(el){
+    const target = +el.dataset.count, start = performance.now(), dur = 1800;
+    (function step(now){
+      const t = Math.min((now - start) / dur, 1);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - t, 3)));
+      if (t < 1) requestAnimationFrame(step);
+    })(start);
+  }
+  const observeReveals = () => $$('.reveal:not(.in)').forEach(el => io.observe(el));
+
+  /* ---------- services ---------- */
+  const ICONS = {
+    wash:     '<path d="M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11z"/>',
+    polish:   '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',
+    ceramic:  '<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/>',
+    interior: '<rect x="5" y="4" width="14" height="16" rx="3"/><path d="M9 9h6"/>'
+  };
+  let services = [];
+
+  async function loadServices(){
+    services = await api('/api/services');
+    $('#servicesGrid').innerHTML = services.map((s, i) => `
+      <article class="glow reveal" style="transition-delay:${i * 90}ms">
+        <div class="card-ico"><svg viewBox="0 0 24 24">${ICONS[s.id] || ''}</svg></div>
+        <h3>${esc(s.name)}</h3>
+        <p>${esc(s.desc)}</p>
+        <div class="card-foot"><span>${s.from ? 'от ' : ''}${rub(s.price)}</span><small>${esc(s.time)}</small></div>
+      </article>`).join('');
+    $('#f-service').innerHTML = services.map(s =>
+      `<option value="${s.id}">${esc(s.name)} — ${s.from ? 'от ' : ''}${rub(s.price)}</option>`).join('');
+    $$('.glow').forEach(el => el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    }));
+    observeReveals();
+    updatePrice();
+  }
+
+  /* ---------- gallery (before / after sliders) ---------- */
+  async function loadGallery(){
+    const items = await api('/api/gallery');
+    const box = $('#galleryGrid');
+    if (!items.length) {
+      box.innerHTML = `<div class="gallery-empty reveal"><h3>Галерея скоро появится</h3><p>Фото работ добавляются в папку public/assets/gallery.</p></div>`;
+    } else {
+      box.innerHTML = items.map((g, i) => `
+        <div class="reveal" style="transition-delay:${i * 80}ms">
+          <div class="ba" data-ba>
+            <img src="${esc(g.before)}" alt="До: ${esc(g.title)}" loading="lazy">
+            <img class="after" src="${esc(g.after)}" alt="После: ${esc(g.title)}" loading="lazy">
+            <div class="handle"></div>
+            <span class="tag l">До</span><span class="tag r">После</span>
+          </div>
+          <div class="ba-cap">${esc(g.title)}</div>
+        </div>`).join('');
+      $$('[data-ba]').forEach(el => {
+        const move = (x) => {
+          const r = el.getBoundingClientRect();
+          el.style.setProperty('--pos', Math.min(100, Math.max(0, ((x - r.left) / r.width) * 100)) + '%');
+        };
+        el.addEventListener('mousemove', e => move(e.clientX));
+        el.addEventListener('touchmove', e => move(e.touches[0].clientX), { passive: true });
+      });
+    }
+    observeReveals();
+  }
+
+  /* ---------- calendar & slots ---------- */
+  const today = new Date(); today.setHours(0,0,0,0);
+  const cal = { y: today.getFullYear(), m: today.getMonth() };
+  let selDate = null, selTime = null;
+  let slotList = [], taken = [];
+  let promo = null; // { code, percent }
+
+  function renderCal(){
+    const first = new Date(cal.y, cal.m, 1);
+    const offset = (first.getDay() + 6) % 7;
+    const days = new Date(cal.y, cal.m + 1, 0).getDate();
+    const todayIso = toIso(today);
+    let html = '';
+    for (let i = 0; i < offset; i++) html += '<span class="day empty"></span>';
+    for (let d = 1; d <= days; d++) {
+      const date = new Date(cal.y, cal.m, d);
+      const iso = toIso(date);
+      const cls = ['day', iso === selDate ? 'sel' : '', iso === todayIso ? 'today' : ''].join(' ');
+      html += `<button type="button" class="${cls}" data-d="${iso}" style="animation-delay:${d * 12}ms" ${date < today ? 'disabled' : ''}>${d}</button>`;
+    }
+    $('#calDays').innerHTML = html;
+    $('#calTitle').textContent = `${MONTHS[cal.m]} ${cal.y}`;
+    $('#prevM').disabled = cal.y === today.getFullYear() && cal.m === today.getMonth();
+  }
+
+  function renderSlots(){
+    const box = $('#slots');
+    if (!selDate) { box.innerHTML = '<p class="hint">Сначала выберите дату</p>'; return; }
+    const now = new Date();
+    box.innerHTML = slotList.map(t => {
+      const busy = taken.includes(t) || new Date(`${selDate}T${t}:00`) < now;
+      return `<button type="button" class="slot ${t === selTime ? 'sel' : ''}" data-t="${t}" ${busy ? 'disabled' : ''}>${t}</button>`;
+    }).join('');
+  }
+
+  async function loadSlots(){
+    if (!selDate) return renderSlots();
+    try {
+      const data = await api(`/api/slots?date=${selDate}`);
+      slotList = data.slots; taken = data.taken;
+      if (selTime && taken.includes(selTime)) selTime = null;
+    } catch (err) {
+      showToast(err.message, true);
+    }
+    renderSlots();
+  }
+
+  $('#calDays').addEventListener('click', e => {
+    const b = e.target.closest('.day[data-d]');
+    if (!b) return;
+    selDate = b.dataset.d; selTime = null;
+    $('#calErr').textContent = '';
+    renderCal();
+    loadSlots();
+  });
+  $('#slots').addEventListener('click', e => {
+    const b = e.target.closest('.slot[data-t]');
+    if (!b || b.disabled) return;
+    selTime = b.dataset.t;
+    $('#calErr').textContent = '';
+    renderSlots();
+  });
+  $('#prevM').addEventListener('click', () => { cal.m--; if (cal.m < 0) { cal.m = 11; cal.y--; } renderCal(); });
+  $('#nextM').addEventListener('click', () => { cal.m++; if (cal.m > 11) { cal.m = 0; cal.y++; } renderCal(); });
+
+  /* ---------- price & promo ---------- */
+  function updatePrice(){
+    const svc = services.find(s => s.id === $('#f-service').value);
+    if (!svc) return;
+    const discount = promo ? Math.round(svc.price * promo.percent / 100) : 0;
+    $('#priceOut').textContent = (svc.from ? 'от ' : '') + rub(svc.price - discount);
+  }
+  $('#f-service').addEventListener('change', updatePrice);
+
+  let promoTimer;
+  $('#f-promo').addEventListener('input', e => {
+    const f = e.target.closest('.field');
+    f.classList.remove('bump', 'erase'); void f.offsetWidth;
+    f.classList.add(e.inputType && e.inputType.startsWith('delete') ? 'erase' : 'bump');
+
+    clearTimeout(promoTimer);
+    const code = e.target.value.trim();
+    const line = $('#promoLine');
+    if (!code) { promo = null; line.textContent = ''; line.className = 'promo-line'; updatePrice(); return; }
+    promoTimer = setTimeout(async () => {
+      try {
+        promo = await api('/api/promo/check', { method: 'POST', body: { code } });
+        line.textContent = `Скидка ${promo.percent}% применена`;
+        line.className = 'promo-line ok';
+      } catch (err) {
+        promo = null;
+        line.textContent = 'Такого промокода нет';
+        line.className = 'promo-line bad';
+      }
+      updatePrice();
+    }, 450);
+  });
+
+  /* ---------- input animations & phone mask ---------- */
+  $$('#bookForm [data-field] input').forEach(input => {
+    input.addEventListener('input', e => {
+      const f = input.closest('[data-field]');
+      f.classList.remove('bump', 'erase', 'err'); void f.offsetWidth;
+      f.classList.add(e.inputType && e.inputType.startsWith('delete') ? 'erase' : 'bump');
+      input.classList.remove('typing'); void input.offsetWidth; input.classList.add('typing');
+    });
+  });
+
+  const phone = $('#f-phone');
+  phone.addEventListener('input', () => {
+    let d = phone.value.replace(/\D/g, '');
+    if (d.startsWith('8')) d = '7' + d.slice(1);
+    if (!d.startsWith('7')) d = '7' + d;
+    d = d.slice(0, 11);
+    let out = '+7';
+    if (d.length > 1) out += ' (' + d.slice(1, 4);
+    if (d.length >= 4) out += ') ' + d.slice(4, 7);
+    if (d.length >= 7) out += '-' + d.slice(7, 9);
+    if (d.length >= 9) out += '-' + d.slice(9, 11);
+    phone.value = out;
+  });
+
+  const flagError = f => { f.classList.remove('err'); void f.offsetWidth; f.classList.add('err'); };
+
+  /* ---------- submit ---------- */
+  $('#bookForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = $('#f-name'), car = $('#f-car');
+    let ok = true;
+    if (name.value.trim().length < 2) { flagError(name.closest('[data-field]')); ok = false; }
+    if (phone.value.replace(/\D/g, '').length < 11) { flagError(phone.closest('[data-field]')); ok = false; }
+    if (car.value.trim().length < 2) { flagError(car.closest('[data-field]')); ok = false; }
+    if (!selDate || !selTime) {
+      $('#calErr').textContent = !selDate ? 'Выберите дату в календаре' : 'Выберите свободное время';
+      $('#calErr').animate([{transform:'translateX(-5px)'},{transform:'translateX(5px)'},{transform:'none'}], { duration: 300 });
+      ok = false;
+    }
+    if (!ok) return;
+
+    const btn = $('#submitBtn');
+    btn.disabled = true;
+    try {
+      const booking = await api('/api/bookings', {
+        method: 'POST',
+        body: {
+          name: name.value, phone: phone.value, car: car.value,
+          service: $('#f-service').value, date: selDate, time: selTime,
+          promo: promo ? $('#f-promo').value.trim() : ''
+        }
+      });
+      showToast('Демо-режим: заявка не отправлена и не сохранена.');
+      e.target.reset();
+      promo = null;
+      $('#promoLine').textContent = ''; $('#promoLine').className = 'promo-line';
+      selDate = null; selTime = null; slotList = []; taken = [];
+      renderCal(); renderSlots(); updatePrice();
+    } catch (err) {
+      showToast(err.message, true);
+      if (err.status === 409) { selTime = null; loadSlots(); }
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  let toastTimer;
+  function showToast(text, bad = false){
+    const t = $('#toast');
+    $('#toastText').textContent = text;
+    t.classList.toggle('bad', bad);
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3800);
+  }
+
+  /* ================= ADMIN ================= */
+  const adminEl = $('#admin'), loginView = $('#loginView'), panelView = $('#panelView');
+  let filter = 'all', bookingsCache = [];
+
+  const isAdminRoute = () =>
+    location.pathname.replace(/\/+$/, '') === '/admin' || location.hash === '#/admin';
+
+  function route(){
+    const admin = isAdminRoute();
+    if (admin) { location.hash = ''; showToast('Админ-панель недоступна в GitHub Pages демо.', true); return; }
+    $('#site').hidden = admin;
+    $('#toast').hidden = admin;
+    adminEl.hidden = !admin;
+    if (admin) { sessionStorage.getItem(SESSION_KEY) ? showPanel() : showLogin(); }
+    scrollTo(0, 0);
+  }
+  function showLogin(){
+    loginView.hidden = false; panelView.hidden = true;
+    setTimeout(() => $('#pass').focus(), 50);
+  }
+  function showPanel(){
+    loginView.hidden = true; panelView.hidden = false;
+    loadAdmin();
+    loadPromos();
+  }
+
+  $('#loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const pass = $('#pass').value;
+    sessionStorage.setItem(SESSION_KEY, pass);
+    try {
+      await api('/api/admin/login', { method: 'POST', admin: true });
+      $('#pass').value = '';
+      showPanel();
+    } catch (err) {
+      sessionStorage.removeItem(SESSION_KEY);
+      const box = $('.a-login-box');
+      box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+      $('#loginErr').textContent = pass ? 'Неверный пароль' : 'Введите пароль';
+      flagError($('#pass').closest('.field'));
+    }
+  });
+  $('#pass').addEventListener('input', e => {
+    const f = e.target.closest('.field');
+    f.classList.remove('bump', 'erase', 'err'); void f.offsetWidth;
+    f.classList.add(e.inputType && e.inputType.startsWith('delete') ? 'erase' : 'bump');
+  });
+
+  $('#logout').addEventListener('click', () => { sessionStorage.removeItem(SESSION_KEY); showLogin(); });
+  $('#toSite').addEventListener('click', () => { history.pushState({}, '', '/'); route(); });
+
+  $$('.tab').forEach(t => t.addEventListener('click', () => {
+    $$('.tab').forEach(x => x.classList.toggle('on', x === t));
+    $('#tabBookings').hidden = t.dataset.tab !== 'bookings';
+    $('#tabPromos').hidden = t.dataset.tab !== 'promos';
+    if (t.dataset.tab === 'promos') loadPromos();
+  }));
+
+  async function loadAdmin(){
+    try {
+      bookingsCache = await api('/api/admin/bookings', { admin: true });
+      renderAdmin();
+    } catch (err) {
+      if (err.status === 401) { sessionStorage.removeItem(SESSION_KEY); showLogin(); }
+    }
+  }
+
+  function renderAdmin(){
+    const all = bookingsCache;
+    const todayIso = toIso(new Date());
+    $('#sAll').textContent = all.length;
+    $('#sNew').textContent = all.filter(b => !b.seen).length;
+    $('#sToday').textContent = all.filter(b => b.date === todayIso).length;
+    $('#sWait').textContent = all.filter(b => b.status === 'waiting').length;
+
+    const chipData = [['all', 'Все', all.length], ...Object.entries(STATUS).map(([k, v]) => [k, v.label, all.filter(b => b.status === k).length])];
+    $('#chips').innerHTML = chipData.map(([k, label, n]) =>
+      `<button type="button" class="chip ${filter === k ? 'on' : ''}" data-f="${k}">${label}<i>${n}</i></button>`).join('');
+
+    const shown = filter === 'all' ? all : all.filter(b => b.status === filter);
+    $('#list').innerHTML = shown.length
+      ? shown.map((b, i) => cardHTML(b, i)).join('')
+      : `<div class="a-empty"><h3>Заявок нет</h3><p>Здесь появятся записи, которые оставят клиенты на сайте.</p></div>`;
+  }
+
+  function cardHTML(b, i){
+    return `
+    <article class="bk ${STATUS[b.status].cls} ${b.seen ? '' : 'new'}" data-id="${b.id}" style="animation-delay:${Math.min(i, 12) * 60}ms">
+      <div class="bk-main">
+        <div class="bk-time"><b>${b.time}</b><span>${fmtDate(b.date)}</span></div>
+        <div class="bk-info">
+          <h4>${esc(b.name)}${b.seen ? '' : '<em class="badge">NEW</em>'}</h4>
+          <p>${esc(b.phone)} · ${esc(b.car)}</p>
+          <p class="muted">${esc(b.service)}</p>
+          ${b.promo ? `<p class="promo-tag">Промокод ${esc(b.promo)} · −${rub(b.discount)}</p>` : ''}
+        </div>
+        <div class="bk-price">${b.discount ? `<small>${rub(b.price)}</small>` : ''}${rub(b.total)}</div>
+        <button class="del" type="button" data-del="${b.id}" title="Удалить заявку" aria-label="Удалить">×</button>
+      </div>
+      <div class="bk-status">
+        ${Object.entries(STATUS).map(([k, v]) =>
+          `<button type="button" class="stbtn ${k === b.status ? 'on' : ''}" data-set="${b.id}" data-st="${k}">${v.label}</button>`).join('')}
+      </div>
+    </article>`;
+  }
+
+  $('#chips').addEventListener('click', e => {
+    const c = e.target.closest('.chip');
+    if (!c) return;
+    filter = c.dataset.f;
+    renderAdmin();
+  });
+
+  $('#list').addEventListener('click', async e => {
+    const st = e.target.closest('[data-set]');
+    if (st) {
+      try {
+        await api(`/api/admin/bookings/${st.dataset.set}`, { method: 'PATCH', body: { status: st.dataset.st }, admin: true });
+      } catch (err) { showToast(err.message, true); }
+      return loadAdmin();
+    }
+    const del = e.target.closest('[data-del]');
+    if (del) {
+      if (!confirm('Удалить заявку?')) return;
+      const card = del.closest('.bk');
+      card.style.transition = 'opacity .35s, transform .35s';
+      card.style.opacity = '0'; card.style.transform = 'translateX(30px)';
+      await new Promise(r => setTimeout(r, 330));
+      await api(`/api/admin/bookings/${del.dataset.del}`, { method: 'DELETE', admin: true });
+      return loadAdmin();
+    }
+    const card = e.target.closest('.bk.new');
+    if (card) {
+      await api(`/api/admin/bookings/${card.dataset.id}`, { method: 'PATCH', body: { seen: true }, admin: true });
+      loadAdmin();
+    }
+  });
+
+  $('#readAll').addEventListener('click', async () => {
+    await api('/api/admin/bookings/read-all', { method: 'POST', admin: true });
+    loadAdmin();
+  });
+
+  /* ---------- promo codes ---------- */
+  async function loadPromos(){
+    try {
+      const list = await api('/api/admin/promos', { admin: true });
+      $('#promoList').innerHTML = list.length ? list.map(p => `
+        <div class="promo-row ${p.active ? '' : 'off'}">
+          <div><b>${esc(p.code)}</b><br><span>Скидка ${p.percent}% · ${p.active ? 'активен' : 'выключен'}</span></div>
+          <div class="acts">
+            <button type="button" data-toggle="${esc(p.code)}" data-active="${p.active ? 0 : 1}">${p.active ? 'Выключить' : 'Включить'}</button>
+            <button type="button" class="danger" data-pdel="${esc(p.code)}">Удалить</button>
+          </div>
+        </div>`).join('') : '<div class="a-empty"><p>Промокодов пока нет</p></div>';
+    } catch (err) {
+      if (err.status === 401) { sessionStorage.removeItem(SESSION_KEY); showLogin(); }
+    }
+  }
+
+  $('#promoForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    try {
+      await api('/api/admin/promos', {
+        method: 'POST', admin: true,
+        body: { code: $('#p-code').value.trim(), percent: $('#p-pct').value }
+      });
+      $('#promoMsg').textContent = '';
+      $('#p-code').value = ''; $('#p-pct').value = '';
+      loadPromos();
+    } catch (err) {
+      $('#promoMsg').textContent = err.message;
+    }
+  });
+
+  $('#promoList').addEventListener('click', async e => {
+    const t = e.target.closest('[data-toggle]');
+    if (t) {
+      await api(`/api/admin/promos/${t.dataset.toggle}`, { method: 'PATCH', body: { active: t.dataset.active === '1' }, admin: true });
+      return loadPromos();
+    }
+    const d = e.target.closest('[data-pdel]');
+    if (d && confirm('Удалить промокод?')) {
+      await api(`/api/admin/promos/${d.dataset.pdel}`, { method: 'DELETE', admin: true });
+      loadPromos();
+    }
+  });
+
+  /* ---------- init ---------- */
+  addEventListener('popstate', route);
+  addEventListener('hashchange', route);
+  renderCal();
+  renderSlots();
+  onScroll();
+  observeReveals();
+  loadServices().catch(() => showToast('Не удалось загрузить услуги. Запущен ли сервер?', true));
+  loadGallery().catch(() => {});
+  route();
+})();
+</script>
+
+    
+</body>
+</html>
